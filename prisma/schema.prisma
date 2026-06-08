@@ -1,0 +1,168 @@
+// Hospital Bed & Resource Allocation System - Prisma Schema
+// Defines all database models, enums, and relationships
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// Enums
+// ============================================================
+
+enum Role {
+  ADMIN
+  DOCTOR
+  NURSE
+}
+
+enum BedStatus {
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+  RESERVED
+}
+
+enum BedType {
+  REGULAR
+  ICU
+  PEDIATRIC
+  MATERNITY
+  EMERGENCY
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum PatientStatus {
+  ADMITTED
+  DISCHARGED
+  TRANSFERRED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum AlertPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+// ============================================================
+// Models
+// ============================================================
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(NURSE)
+  createdAt DateTime @default(now())
+}
+
+model Ward {
+  id        Int    @id @default(autoincrement())
+  name      String @unique
+  floor     Int
+  totalBeds Int
+  beds      Bed[]
+}
+
+model Bed {
+  id        Int       @id @default(autoincrement())
+  ward      Ward      @relation(fields: [wardId], references: [id])
+  wardId    Int
+  bedNumber String    @unique
+  status    BedStatus @default(AVAILABLE)
+  bedType   BedType   @default(REGULAR)
+  patient   Patient?
+
+  @@index([wardId])
+  @@index([status])
+}
+
+model Patient {
+  id           Int           @id @default(autoincrement())
+  name         String
+  age          Int
+  gender       Gender
+  contact      String
+  diagnosis    String
+  bed          Bed?          @relation(fields: [bedId], references: [id])
+  bedId        Int?          @unique
+  admittedAt   DateTime      @default(now())
+  dischargedAt DateTime?
+  status       PatientStatus @default(ADMITTED)
+  priority     Priority      @default(MEDIUM)
+  doctor       String?
+  notes        String?       @db.Text
+
+  @@index([status])
+  @@index([priority])
+}
+
+model Resource {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  category  String
+  total     Int
+  available Int
+  icon      String
+  updatedAt DateTime @updatedAt
+}
+
+model Alert {
+  id         Int           @id @default(autoincrement())
+  title      String
+  message    String        @db.Text
+  priority   AlertPriority
+  wardId     Int?
+  patientId  Int?
+  createdBy  Int
+  resolved   Boolean       @default(false)
+  resolvedAt DateTime?
+  resolvedBy Int?
+  createdAt  DateTime      @default(now())
+
+  @@index([resolved])
+  @@index([priority])
+}
+
+model ActivityLog {
+  id         Int      @id @default(autoincrement())
+  action     String
+  entityType String
+  entityId   Int
+  userId     Int?
+  details    String?  @db.Text
+  createdAt  DateTime @default(now())
+
+  @@index([entityType])
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  title     String
+  message   String
+  type      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([read])
+}

@@ -1,0 +1,504 @@
+/* ============================================================
+   Login Page — CSS Module
+   Full-screen centered layout with animated gradient background,
+   floating orbs, glass card, and premium form elements.
+   ============================================================ */
+
+/* ---- Page Container ---- */
+.page {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  overflow: hidden;
+
+  /* Animated gradient background */
+  background:
+    radial-gradient(ellipse at 20% 50%, hsla(174, 72%, 40%, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, hsla(220, 70%, 55%, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, hsla(270, 60%, 55%, 0.08) 0%, transparent 50%),
+    var(--bg-primary);
+}
+
+/* Subtle grid pattern overlay */
+.page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(hsla(0, 0%, 100%, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, hsla(0, 0%, 100%, 0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Floating orb – top-left */
+.page::after {
+  content: '';
+  position: absolute;
+  top: -120px;
+  left: -80px;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, hsla(174, 72%, 40%, 0.15) 0%, transparent 70%);
+  animation: floatOrb1 12s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---- Second floating orb (using a wrapper) ---- */
+.orbDecor {
+  position: absolute;
+  bottom: -100px;
+  right: -60px;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  background: radial-gradient(circle, hsla(220, 70%, 55%, 0.12) 0%, transparent 70%);
+  animation: floatOrb2 15s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Third orb – center-right area */
+.orbDecorSmall {
+  position: absolute;
+  top: 30%;
+  right: 15%;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, hsla(270, 60%, 55%, 0.1) 0%, transparent 70%);
+  animation: floatOrb3 10s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---- Login Card ---- */
+.card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  background: hsla(222, 25%, 12%, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-xl);
+  box-shadow:
+    var(--shadow-xl),
+    inset 0 1px 0 hsla(0, 0%, 100%, 0.06);
+  padding: 40px 36px;
+  animation: cardEntrance 700ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ---- Logo / Branding ---- */
+.logoArea {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.logoIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+  border-radius: var(--radius-lg);
+  margin-bottom: 16px;
+  box-shadow: 0 0 30px var(--accent-teal-glow);
+  font-size: 1.6rem;
+  animation: logoGlow 3s ease-in-out infinite;
+}
+
+.logoTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue), var(--accent-purple));
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 4s ease infinite;
+}
+
+.logoSubtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* ---- Form ---- */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.input {
+  padding: 12px 16px;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  background: hsla(222, 25%, 16%, 0.8);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  outline: none;
+  font-family: inherit;
+  width: 100%;
+}
+
+.input:focus {
+  border-color: var(--accent-teal);
+  box-shadow: 0 0 0 3px var(--accent-teal-muted), 0 0 16px var(--accent-teal-glow);
+  background: hsla(222, 25%, 18%, 0.9);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ---- Select (role) ---- */
+.select {
+  composes: input;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%239ca3af' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.select option {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* ---- Submit Button ---- */
+.submitBtn {
+  width: 100%;
+  padding: 14px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: inherit;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.submitBtn:hover:not(:disabled) {
+  box-shadow:
+    0 0 24px var(--accent-teal-glow),
+    0 0 48px hsla(174, 72%, 40%, 0.15),
+    var(--shadow-md);
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+
+.submitBtn:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+  box-shadow: var(--shadow-sm);
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(0.3);
+}
+
+/* Button shimmer effect on hover */
+.submitBtn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsla(0, 0%, 100%, 0.15),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.submitBtn:hover::before {
+  left: 100%;
+}
+
+/* ---- Loading spinner inside button ---- */
+.btnSpinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid hsla(0, 0%, 100%, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+/* ---- Error Message ---- */
+.error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  font-size: 0.82rem;
+  color: var(--priority-critical);
+  background: var(--priority-critical-bg);
+  border: 1px solid hsla(0, 85%, 55%, 0.2);
+  border-radius: var(--radius-md);
+  animation: slideUp 300ms ease;
+}
+
+.errorIcon {
+  flex-shrink: 0;
+  font-size: 1rem;
+}
+
+/* ---- Role Indicator ---- */
+.roleIndicators {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.roleBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-glass);
+  color: var(--text-muted);
+  background: hsla(0, 0%, 100%, 0.03);
+  transition: all var(--transition-fast);
+}
+
+.roleBadge.admin {
+  border-color: hsla(270, 60%, 55%, 0.3);
+  color: var(--accent-purple);
+  background: var(--accent-purple-muted);
+}
+
+.roleBadge.doctor {
+  border-color: hsla(174, 72%, 40%, 0.3);
+  color: var(--accent-teal);
+  background: var(--accent-teal-muted);
+}
+
+.roleBadge.nurse {
+  border-color: hsla(220, 70%, 55%, 0.3);
+  color: var(--accent-blue);
+  background: var(--accent-blue-muted);
+}
+
+.roleBadge.staff {
+  border-color: hsla(40, 90%, 55%, 0.3);
+  color: var(--status-maintenance);
+  background: var(--priority-medium-bg);
+}
+
+/* ---- Footer Text ---- */
+.footer {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-glass);
+}
+
+.footerText {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.footerLink {
+  color: var(--accent-teal);
+  font-weight: 500;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.footerLink:hover {
+  color: var(--accent-blue);
+}
+
+/* ---- Demo credentials hint ---- */
+.demoHint {
+  margin-top: 16px;
+  padding: 12px;
+  background: hsla(174, 72%, 40%, 0.06);
+  border: 1px solid hsla(174, 72%, 40%, 0.15);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.demoHintTitle {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent-teal);
+  margin-bottom: 6px;
+}
+
+.demoHintText {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.demoHintText code {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  background: hsla(0, 0%, 100%, 0.06);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+@keyframes cardEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes floatOrb1 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(30px, 20px) scale(1.05);
+  }
+  50% {
+    transform: translate(-10px, 40px) scale(0.95);
+  }
+  75% {
+    transform: translate(20px, -10px) scale(1.02);
+  }
+}
+
+@keyframes floatOrb2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(-25px, -30px) scale(1.08);
+  }
+  66% {
+    transform: translate(15px, -15px) scale(0.94);
+  }
+}
+
+@keyframes floatOrb3 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-20px, 25px) scale(1.1);
+  }
+}
+
+@keyframes logoGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px var(--accent-teal-glow);
+  }
+  50% {
+    box-shadow: 0 0 40px var(--accent-teal-glow), 0 0 60px hsla(174, 72%, 40%, 0.15);
+  }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 480px) {
+  .card {
+    padding: 32px 24px;
+    border-radius: var(--radius-lg);
+    max-width: 100%;
+  }
+
+  .logoTitle {
+    font-size: 1.3rem;
+  }
+
+  .logoIcon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.3rem;
+  }
+
+  .roleIndicators {
+    flex-wrap: wrap;
+  }
+
+  .submitBtn {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .card {
+    padding: 24px 18px;
+  }
+
+  .logoTitle {
+    font-size: 1.15rem;
+  }
+}
