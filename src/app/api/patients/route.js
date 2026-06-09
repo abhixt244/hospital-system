@@ -74,9 +74,23 @@ export async function POST(request) {
         { status: 401 }
       );
     }
-
     const body = await request.json();
-    const { name, age, gender, contact, diagnosis, bedId, priority, doctor, notes } = body;
+    const {
+      name,
+      age,
+      gender,
+      contact: contactField,
+      contactNumber,
+      diagnosis,
+      bedId,
+      priority,
+      doctor,
+      notes: notesField,
+      doctorNotes,
+    } = body;
+
+    const contact = contactField ?? contactNumber ?? '';
+    const notes = notesField ?? doctorNotes ?? null;
 
     // Validate required fields
     if (!name || !age || !gender || !diagnosis) {
@@ -111,7 +125,7 @@ export async function POST(request) {
           name,
           age: parseInt(age, 10),
           gender,
-          contact: contact || null,
+          contact,
           diagnosis,
           bedId: bedId ? parseInt(bedId) : null,
           priority: priority || 'MEDIUM',

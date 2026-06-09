@@ -113,8 +113,14 @@ export default function PatientsPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...admitForm,
-          age: parseInt(admitForm.age),
+          name: admitForm.name,
+          age: parseInt(admitForm.age, 10),
+          gender: admitForm.gender,
+          contact: admitForm.contactNumber || admitForm.emergencyContact || '',
+          diagnosis: admitForm.diagnosis,
+          priority: admitForm.priority,
+          bedId: admitForm.bedId || null,
+          notes: admitForm.doctorNotes || null,
         }),
       });
 
@@ -532,15 +538,15 @@ export default function PatientsPage() {
               { label: 'Name', value: selectedPatient.name },
               { label: 'Age', value: selectedPatient.age },
               { label: 'Gender', value: selectedPatient.gender },
-              { label: 'Contact', value: selectedPatient.contactNumber || '—' },
+              { label: 'Contact', value: selectedPatient.contact || '—' },
               { label: 'Emergency Contact', value: selectedPatient.emergencyContact || '—' },
               { label: 'Diagnosis', value: selectedPatient.diagnosis || '—' },
               { label: 'Priority', value: selectedPatient.priority },
               { label: 'Status', value: selectedPatient.status },
               { label: 'Bed', value: selectedPatient.bed?.bedNumber || '—' },
               { label: 'Ward', value: selectedPatient.bed?.ward?.name || '—' },
-              { label: 'Admitted', value: selectedPatient.admissionDate ? new Date(selectedPatient.admissionDate).toLocaleDateString() : '—' },
-              { label: 'Doctor Notes', value: selectedPatient.doctorNotes || '—' },
+              { label: 'Admitted', value: selectedPatient.admittedAt ? new Date(selectedPatient.admittedAt).toLocaleDateString() : '—' },
+              { label: 'Doctor Notes', value: selectedPatient.notes || '—' },
             ].map(({ label, value }) => (
               <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid var(--border-primary)' }}>
                 <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>{label}</span>
@@ -631,7 +637,7 @@ export default function PatientsPage() {
                     <option value="">Select bed...</option>
                     {availableBeds.map(bed => (
                       <option key={bed.id} value={bed.id}>
-                        {bed.bedNumber} - {bed.ward?.name} ({bed.type?.replace(/_/g, ' ')})
+                        {bed.bedNumber} - {bed.ward?.name} ({bed.bedType?.replace(/_/g, ' ')})
                       </option>
                     ))}
                   </select>
@@ -743,7 +749,7 @@ export default function PatientsPage() {
                 <option value="">Choose a bed...</option>
                 {availableBeds.map(bed => (
                   <option key={bed.id} value={bed.id}>
-                    {bed.bedNumber} - {bed.ward?.name} ({bed.type?.replace(/_/g, ' ')})
+                    {bed.bedNumber} - {bed.ward?.name} ({bed.bedType?.replace(/_/g, ' ')})
                   </option>
                 ))}
               </select>
